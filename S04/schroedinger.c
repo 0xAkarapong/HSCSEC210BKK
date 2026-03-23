@@ -23,10 +23,18 @@ int main() {
             printf("failed to spawn a cat, terminating the experiment\n");
             return 1;
         }
+        child_pids[i] = last_child_pid;
     }
     sleep(1);
 
     // Now, measure the number of cats still alive!
-    int cats_alive; // = ???
+    int cats_alive = 0;
+    for (int i = 0; i < NUM_CATS; i++) {
+        int child_status;
+        pid_t result = waitpid(child_pids[i], &child_status, WNOHANG);
+        if (result == 0) {
+            cats_alive++;
+        }
+    }
     printf("%d cats are ok\n", cats_alive);
 }
