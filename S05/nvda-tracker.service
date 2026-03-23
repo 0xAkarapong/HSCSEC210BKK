@@ -1,0 +1,17 @@
+[Unit]
+Description=NVDA Stock Price Tracker
+After=network.target
+
+[Service]
+Type=simple
+User=nvda
+Group=nvda
+WorkingDirectory=/opt/nvda-tracker
+ExecStart=/usr/bin/bun run /opt/nvda-tracker/nvda-tracker.ts
+Restart=on-failure
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
