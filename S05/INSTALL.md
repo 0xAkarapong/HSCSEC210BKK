@@ -5,17 +5,23 @@
 - `src/package.json` - Dependencies
 - `nvda-tracker.service` - Systemd unit file
 
-## Prerequisites
+ ## Prerequisites
 
-1. Install Bun runtime:
-```bash
-curl -fsSL https://bun.sh/install | bash
-```
+ 1. Install Bun runtime:
+ ```bash
+ curl -fsSL https://bun.sh/install | bash
+ ```
 
-2. Create dedicated user (run as root):
-```bash
-useradd -r -s /bin/false nvda
-```
+ 2. Create dedicated user (run as root):
+ ```bash
+ useradd -r -s /bin/false nvda
+ ```
+
+ 3. Copy Bun to system PATH (so the nvda user can access it):
+ ```bash
+ sudo cp ~/.bun/bin/bun /usr/local/bin/bun
+ sudo chmod +x /usr/local/bin/bun
+ ```
 
 ## Installation Steps
 
@@ -78,11 +84,17 @@ This ensures the EOD summary prints even if the program was restarted during the
 
 ## Bun Path Note
 
-If Bun is not in PATH, find it with:
+Bun installs to `~/.bun/bin/bun` which is not accessible to the `nvda` user.
+The service file uses `/usr/local/bin/bun` - ensure you copy bun there before starting the service.
+
+To find and copy Bun:
 ```bash
+# Find Bun
 which bun
 # or
 ls ~/.bun/bin/bun
-```
 
-Update the `ExecStart` path in the service file if needed.
+# Copy to system path (required for service to work)
+sudo cp ~/.bun/bin/bun /usr/local/bin/bun
+sudo chmod +x /usr/local/bin/bun
+```
